@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  static-serve:
+    build: Dockerfile
+    restart: unless-stopped
+    environment:
+      - LISTEN_ADDR=172.17.0.1
+    volumes:
+      - $HOME/www:/var/www:rw
+    ports:
+      - 8080:80

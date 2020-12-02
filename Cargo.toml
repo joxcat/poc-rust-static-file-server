@@ -1,0 +1,11 @@
+[package]
+name = "static-file-server"
+version = "0.1.0"
+authors = ["joxcat <blackksoulls@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+actix-web = { version = "3.3", features = ["compress"], default-features = false }
+actix-files = "0.4"
+num_cpus = "1.13"
+derive_more = "0.99"
