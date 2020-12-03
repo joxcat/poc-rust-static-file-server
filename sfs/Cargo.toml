@@ -13,5 +13,5 @@ derive_more = "0.99"
 [profile.release]
 lto = true
 codegen-units = 1
-opt-level = 'z'
+opt-level = 's'
 panic = 'abort'

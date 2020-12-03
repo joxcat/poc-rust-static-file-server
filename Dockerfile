@@ -8,6 +8,9 @@ COPY ./sfs /root/build
 
 WORKDIR /root/build
 RUN cargo build --target x86_64-unknown-linux-musl --release
+RUN strip target/x86_64-unknown-linux-musl/release/static-file-server
+
+RUN apt install -y upx-ucl && upx --best --lzma target/x86_64-unknown-linux-musl/release/static-file-server
 
 #FROM alpine:latest AS latest
 FROM scratch AS latest
