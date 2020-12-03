@@ -9,3 +9,9 @@ actix-web = { version = "3.3", features = ["compress"], default-features = false
 actix-files = "0.4"
 num_cpus = "1.13"
 derive_more = "0.99"
+
+[profile.release]
+lto = true
+codegen-units = 1
+opt-level = 'z'
+panic = 'abort'

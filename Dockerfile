@@ -1,20 +1,27 @@
-FROM rust:slim
-MAINTAINER Johan Planchon <dev@planchon.xyz>
-
-RUN mkdir -p /var/www
-VOLUME /var/www
+FROM rust:slim AS build
+WORKDIR /usr/src/
+RUN rustup target add x86_64-unknown-linux-musl
+RUN apt -y update && apt install -y musl-tools
 
 RUN mkdir -p /root
-COPY . /root/build
+COPY ./sfs /root/build
 
 WORKDIR /root/build
-RUN cargo build --release
-RUN cp target/release/static-file-server /root/build/static-file-server
+RUN cargo build --target x86_64-unknown-linux-musl --release
 
-EXPOSE 8080
-ENV LISTEN_ADDR [::1]
+#FROM alpine:latest AS latest
+FROM scratch AS latest
 
-#HEALTHCHECK CMD "if test $(curl -s -o /dev/null -I -w '%{http_code}' http://${LISTEN_ADDR}:80/) -neq 404; then exit 1; fi"
+#RUN mkdir -p /var/www && mkdir -p /root
+VOLUME /var/www
+EXPOSE 80
+
+MAINTAINER Johan Planchon <dev@planchon.xyz>
+#HEALTHCHECK CMD "if test $(curl -s -o /dev/null -I -w '%{http_code}' http://0.0.0.0:80/) -neq 404; then exit 1; fi"
+
+COPY --from=0 /root/build/target/x86_64-unknown-linux-musl/release/static-file-server /static-file-server
 
 WORKDIR /var/www
-ENTRYPOINT ["/root/build/static-file-server", "127.0.0.1:8080"]
+ENTRYPOINT ["/static-file-server", "0.0.0.0:80"]
+#RUN apk add file
+#ENTRYPOINT ["/usr/bin/file", "/static-file-server"]

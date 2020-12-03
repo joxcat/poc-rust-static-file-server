@@ -1,13 +1,13 @@
-version: '3'
+version: '3.4'
 
 services:
   static-serve:
-    build: .
-    privileged: true
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      target: latest
     restart: unless-stopped
-    #environment:
-      #- LISTEN_ADDR=[::1]
     volumes:
-      - $HOME/www:/var/www:rw
+      - /home/kuro/www:/var/www:rw
     ports:
-      - 8080:8080
+      - 8080:80

@@ -4,6 +4,10 @@ use actix_web::{web, App, HttpRequest, middleware, HttpResponse, http::header, h
 
 use derive_more::{Display, Error};
 
+use std::alloc::System;
+#[global_allocator]
+static A: System = System;
+
 #[derive(Debug, Display, Error)]
 enum ServerErrors {
 	#[display(fmt = "Absolute path is forbidden")]
@@ -52,6 +56,8 @@ async fn index(req: HttpRequest) -> Result<fs::NamedFile, ServerErrors> {
 async fn main() -> std::io::Result<()> {
 	let addr = std::env::args().collect::<Vec<String>>().get(1).cloned().unwrap_or_else(|| String::from("127.0.0.1:8080"));
 	let cpus = num_cpus::get();
+
+	println!("Server starting on {} and {} threads", addr, cpus);
 
 	HttpServer::new(||
 		App::new()
