@@ -31,7 +31,7 @@ async fn index(req: HttpRequest) -> Result<fs::NamedFile, ServerErrors> {
 async fn main() -> std::io::Result<()> {
     let cpus = num_cpus::get();
 
-    println!("Server starting on {} and {} threads", addr, cpus);
+    println!("Server starting on 0.0.0.0:80 and {} threads", cpus);
 
     HttpServer::new(|| {
         App::new()
