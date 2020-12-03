@@ -23,4 +23,4 @@ EXPOSE 80
 COPY --from=build /root/build/target/x86_64-unknown-linux-musl/release/static-file-server /static-file-server
 
 WORKDIR /var/www
-ENTRYPOINT ["/static-file-server", "0.0.0.0:80"]
+ENTRYPOINT ["/static-file-server"]
